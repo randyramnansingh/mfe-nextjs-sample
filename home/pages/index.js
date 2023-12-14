@@ -2,6 +2,8 @@ import React, { Fragment, Suspense, useState } from 'react';
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import {lazy} from 'react';
+import { useSession, signIn, signOut } from "next-auth/react"
+
 let useCustomHook
 let RemoteTitle = ()=>null
 if (process.browser) {
@@ -24,6 +26,17 @@ const Home = ({ loaded }) => {
     const { value } = event.target;
     setUser({ ...user, name: value });
   };
+
+  const { data: session } = useSession()
+  if (!session) {
+    return (
+      <>
+        Not signed in <br />
+        <button onClick={() => signIn()}>Sign in</button>
+      </>
+    )
+  }
+
   return (
     <div>
       <Head>
