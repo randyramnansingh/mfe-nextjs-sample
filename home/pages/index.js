@@ -16,6 +16,20 @@ if (process.browser) {
 }
 console.log('test')
 
+const federatedSignOut = () => {
+  // signOut only signs out of Auth.js's session
+		// We need to log out of Cognito as well
+		// Federated signout is currently not supported.
+		// Therefore, we use a workaround: https://github.com/nextauthjs/next-auth/issues/836#issuecomment-1007630849
+		const signoutRedirectUrl = 'http://localhost:3000/signout';
+		// https://docs.aws.amazon.com/cognito/latest/developerguide/logout-endpoint.html
+		window.location.replace(
+			`${COGNITO_ISSUER}/logout?client_id=${COGNITO_CLIENT_ID}&logout_uri=${encodeURIComponent(
+				signoutRedirectUrl
+			)}`
+		);
+}
+
 const Home = ({ loaded }) => {
   if (process.browser) {
    // useCustomHook();
